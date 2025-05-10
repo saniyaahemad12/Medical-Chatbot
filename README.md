@@ -14,3 +14,32 @@ A smart medical chatbot that provides instant healthcare advice based on user in
 
 🧪 Flask backend integration with ML/NLP model
 
+## 🛠️ Tech Stack
+Frontend: HTML, CSS, JavaScript (optionally Bootstrap or React)
+
+Backend: Python (Flask)
+
+AI/NLP: scikit-learn / spaCy / OpenAI API / custom-trained model
+
+Database: SQLite / Firebase / MongoDB (optional)
+
+APIs: (Optional) MediCare APIs, Symptom Checker APIs, etc.
+
+## 🧑‍⚕️How it work's 
+
+User inputs a medical query (e.g., "I have a sore throat").
+
+The chatbot processes the input using NLP techniques.
+
+Based on symptoms, it classifies or extracts relevant information.
+
+It responds with advice including:
+
+Home precautions
+
+Suggested diet
+
+Recommended exercises or yoga
+
+Alerts (if it suspects a serious condition)
+
