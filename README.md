@@ -6,8 +6,6 @@ A smart medical chatbot that provides instant healthcare advice based on user in
 
 🧠 AI-powered recommendations (precautions, diet, yoga, and exercise)
 
-💬 Human-like conversation flow
-
 📚 Medical knowledge base (custom or external API integration)
 
 🖥️ User-friendly web interface
@@ -20,10 +18,6 @@ Frontend: HTML, CSS, JavaScript (optionally Bootstrap or React)
 Backend: Python (Flask)
 
 AI/NLP: scikit-learn / spaCy / OpenAI API / custom-trained model
-
-Database: SQLite / Firebase / MongoDB (optional)
-
-APIs: (Optional) MediCare APIs, Symptom Checker APIs, etc.
 
 ## 🧑‍⚕️How it work's 
 
