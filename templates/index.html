@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MediWise - Smart Health Advisor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    /* Global Styles */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background-color: #006d77;
+      color: white;
+      padding: 18px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+    header nav a {
+      color: #caf0f8;
+      margin-left: 22px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    header nav a:hover { color: #90e0ef; }
+
+    /* Top Sections */
+    .top-sections {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 40px auto 20px;
+      padding: 0 20px;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .left-fade, .right-fade {
+      flex: 1;
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgb(0 0 0 / 0.08);
+      animation: fadeInUp 1s ease-in-out;
+    }
+    .right-fade {
+      text-align: center;
+    }
+    .left-fade h2, .right-fade h2 {
+      color: #023047;
+      margin-bottom: 14px;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Result Boxes */
+    .result-boxes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .box {
+      width: 140px;
+      height: 140px;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      color: white;
+      font-size: 15px;
+      box-shadow: 0 7px 18px rgb(0 0 0 / 0.15);
+      position: relative;
+      transition: transform 0.25s ease;
+      cursor: default;
+      text-align: center;
+      padding: 10px;
+    }
+    .box:hover { transform: scale(1.05); }
+    .box::before {
+      content: attr(data-step);
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      background: white;
+      color: #023047;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 7px rgb(0 0 0 / 0.2);
+    }
+    .disease { background-color: #ef476f; }
+    .description { background-color: #118ab2; }
+    .precaution { background-color: #ffd166; color: #333; }
+    .medications { background-color: #06d6a0; }
+    .workouts { background-color: #073b4c; }
+    .diets { background-color: #f4a261; color: #333; }
+
+    /* Medi Container */
+    .medi-container {
+      background: white;
+      border-radius: 20px;
+      padding: 35px 30px;
+      box-shadow: 0 12px 30px rgb(0 0 0 / 0.07);
+      max-width: 500px;
+      margin: 40px auto 30px;
+      text-align: center;
+      color: #023047;
+    }
+    .medi-container h1 {
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 2.2rem;
+    }
+    .medi-container p {
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      color: #555;
+    }
+    .medi-container input[type="text"],
+    .medi-container select {
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      border-radius: 12px;
+      border: 1.8px solid #ccc;
+      margin-bottom: 18px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    .medi-container input[type="text"]:focus,
+    .medi-container select:focus {
+      border-color: #00b4d8;
+    }
+   .btn.doctor-btn {
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 14px;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(0,123,255,0.08);
+}
+.btn.doctor-btn:hover {
+  background: linear-gradient(to right, #0072ff, #00c6ff);
+  transform: translateY(-2px) scale(1.03);
+}
+    .btn:hover { background-color: #0077b6; }
+
+   
+    hr {
+      border: 0;
+      border-top: 1px solid #eee;
+      margin: 20px 0;
+    }
+    .doctor-box {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px rgba(0, 123, 255, 0.08);
+  padding: 28px 24px 22px 24px;
+  width: 400px; /* Set fixed smaller width */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  transition: box-shadow 0.2s;
+  margin: 0 auto;
+}
+
+/* Remaining styles stay the same */
+.doctor-box h3 {
+  font-size: 1.3rem;
+  color: #0077b6;
+  margin-bottom: 14px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.doctor-box input[type="text"] {
+  padding: 11px;
+  border-radius: 8px;
+  border: 1.5px solid #bde0fe;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.doctor-box input[type="text"]:focus {
+  border-color: #00b4d8;
+}
+
+.doctor-box button {
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.doctor-box button:hover {
+  background: linear-gradient(to right, #0072ff, #00c6ff);
+  transform: translateY(-2px) scale(1.03);
+}
+
+#doctorList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+#doctorList li {
+  background: #f1f8ff;
+  border-radius: 7px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  color: #023047;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0, 123, 255, 0.07);
+  transition: background 0.2s;
+}
+
+#doctorList li:hover {
+  background: #caf0f8;
+}
+
+.connect-section {
+  background-color: #f7f9fc;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.connect-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.connect-section h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.connect-section p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 40px;
+}
+
+.connect-details {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.connect-item {
+  flex: 1 1 250px;
+}
+
+.connect-item h4 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.connect-item a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.connect-item a:hover {
+  text-decoration: underline;
+}
+
+.social-icons a {
+  font-size: 24px;
+  margin: 0 10px;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+}
+
+    body.light-mode {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+nav .toggle-btn {
+  margin-left: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+nav .lang-select {
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 5px;
+}
+.top-sections {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90vh;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f0f8ff, #e6f2ff);
+  text-align: center;
+  flex-direction: column;
+}
+
+.hero-heading {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #004080;
+}
+
+.highlight {
+  color: #00aaff;
+}
+
+.hero-description {
+  font-size: 1.3rem;
+  max-width: 800px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.full-width-section {
+  width: 100%;
+  padding: 60px 20px;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.symptom-section {
+  background: linear-gradient(to right, #e0f7fa, #ffffff);
+}
+
+.doctor-section {
+  background: linear-gradient(to right, #d4edda
+, #ffffff);
+}
+
+.full-width-section h1,
+.full-width-section h3 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.full-width-section form,
+.full-width-section input,
+.full-width-section select,
+.full-width-section button {
+  width: 90%;
+  max-width: 600px;
+  margin: 10px auto;
+  display: block;
+  font-size: 1rem;
+}
+
+.full-width-section input,
+.full-width-section select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.full-width-section button {
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.full-width-section button:hover {
+  background-color: #0056b3;
+}
+
+#doctorList {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+#doctorList li {
+  background-color: #ffffff;
+  margin: 10px auto;
+  padding: 15px;
+  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+  </style>
+
+
+</head>
+<body>
+
+ <header>
+  <div class="logo">MediWise</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="toggle-btn">🌙</button>
+
+    <!-- Language Selector -->
+    <select id="language-select" class="lang-select">
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
+      <option value="es">Spanish</option>
+    </select>
+  </nav>
+</header>
+
+ <div class="top-sections">
+  <div class="left-fade">
+    <h1 class="hero-heading">Welcome to <span class="highlight">MediWise</span></h1>
+
+    <p class="hero-description">
+      MediWise is your intelligent healthcare companion powered by AI.<br>
+      Instantly check symptoms, find nearby doctors, and receive wellness tips tailored to you.<br>
+      Accessible, smart, and reliable – your health, our priority.
+    </p>
+
+    <!-- Lottie Container -->
+<img src="{{ url_for('static', filename='doc.jpg') }}" alt="Doctor Image" style="width: 300px;" />
+  </div>
+</div>
+
+    </div>
+
+    <div class="right-fade">
+      <h2>Recommendations</h2>
+      <div class="result-boxes">
+        <div class="box disease" data-step="1">Disease Prediction</div>
+        <div class="box description" data-step="2">Description</div>
+        <div class="box precaution" data-step="3">Precautions</div>
+        <div class="box medications" data-step="4">Medications</div>
+        <div class="box workouts" data-step="5">Workouts</div>
+        <div class="box diets" data-step="6">Diet Plan</div>
+      </div>
+    </div>
+  </div>
+<!-- Symptom Checker Section -->
+<section class="full-width-section symptom-section">
+  <h1>Enter Your Symptom</h1>
+  <form id="symptomInput" method="POST" action="/predict">
+    <input type="text" id="symptomInput" name="symptoms" placeholder="Enter your symptom..." required />
+    <div class="example-hint">
+      <em>Example: vomiting, shivering, skin_rash</em>
+    </div>
+
+    <select id="durationSelect" name="duration" required>
+      <option value="">Select duration</option>
+      <option value="1 Day">1 Day</option>
+      <option value="3 Days">3 Days</option>
+      <option value="1 Week">1 Week</option>
+      <option value="2 Weeks">2 Weeks</option>
+      <option value="1 Month">1 Month</option>
+    </select>
+
+    <button type="submit" class="btn doctor-btn">Get Recommendation</button>
+  </form>
+  <div id="recommendationResult"></div>
+</section>
+
+<!-- Nearby Doctors Section -->
+<section class="full-width-section doctor-section">
+  <h3>Find Nearby Doctors</h3>
+  <input type="text" id="locationInput" placeholder="Enter your location" autocomplete="off" />
+  <button onclick="updateDoctors()">Find Doctors</button>
+  <ul id="doctorList"></ul>
+  <div id="map"></div>
+</section>
+
+
+ <!-- Connect With Us Section -->
+<!-- Connect With Us -->
+<section class="connect-section">
+  <div class="connect-container">
+    <h2>Connect With Us</h2>
+    <p>We'd love to hear from you. Reach out for queries, partnerships, or support.</p>
+
+    <div class="connect-details">
+      <div class="connect-item">
+        <h4>Email</h4>
+        <a href="mailto:contact@mediwise.com">contact@mediwise.com</a>
+      </div>
+      <div class="connect-item">
+        <h4>Phone</h4>
+        <a href="tel:+919876543210">+91 98765 43210</a>
+      </div>
+      <div class="connect-item">
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          <a href="https://twitter.com/mediwise" target="_blank">🐦</a>
+          <a href="https://instagram.com/mediwise" target="_blank">📸</a>
+          <a href="https://linkedin.com/company/mediwise" target="_blank">🔗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Footer -->
+<footer style="background-color: #1a1a1a; color: white; text-align: center; padding: 20px 0; font-size: 14px;">
+  &copy; 2025 MediWise. All rights reserved.
+</footer>
+
+<script>
+    // Function to handle form submission and store data in localStorage
+      lottie.loadAnimation({
+      container: document.getElementById('lottie-animation'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'doctor.json' // Make sure this path is correct
+    });
+    // Theme Toggle
+  const toggleBtn = document.getElementById('theme-toggle');
+  const currentTheme = localStorage.getItem('theme') || 'light';
+
+  document.body.classList.add(currentTheme + '-mode');
+  toggleBtn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+  toggleBtn.addEventListener('click', () => {
+    const isDark = document.body.classList.contains('dark-mode');
+    document.body.classList.toggle('dark-mode');
+    document.body.classList.toggle('light-mode');
+    toggleBtn.textContent = isDark ? '🌙' : '☀️';
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  });
+
+  // Language Selector (optional logic)
+  const languageSelect = document.getElementById('language-select');
+  languageSelect.addEventListener('change', () => {
+    const selected = languageSelect.value;
+    alert(`Language changed to: ${selected}`);
+    // You can replace this with dynamic translation logic
+  });
+ <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+  let map = L.map('map').setView([20.5937, 78.9629], 5); // Default: India
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18
+  }).addTo(map);
+
+  function findDoctors() {
+    const location = document.getElementById('locationInput').value;
+    if (!location) return alert("Please enter a location");
+
+    fetch('/find_doctors', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({location})
+    })
+    .then(res => res.json())
+    .then(data => {
+      map.setView([data.center.lat, data.center.lon], 13);
+      data.doctors.forEach(doc => {
+        L.marker([doc.lat, doc.lon])
+          .addTo(map)
+          .bindPopup(`<b>${doc.name}</b><br>${doc.address || ''}`);
+      });
+    })
+    .catch(err => {
+      alert("Error finding doctors");
+      console.error(err);
+    });
+  }
+ 
+  </script>
+</body>
+</html>  
