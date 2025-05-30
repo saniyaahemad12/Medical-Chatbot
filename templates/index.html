@@ -442,8 +442,35 @@ nav .lang-select {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+#about {
+  margin-bottom: 60px;
+}
+       #about {
+      background: #ffffff;
+      text-align: center;
+    }
 
+    #about h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
 
+    #about p {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #555;
+    }
+    
+#map {
+  height: 500px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
   </style>
 
@@ -451,17 +478,19 @@ nav .lang-select {
 </head>
 <body>
 
- <header>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+/>
+<header>
   <div class="logo">MediWise</div>
   <nav>
-    <a href="#">Home</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
-
-    <!-- Theme Toggle -->
+    <a href="#home">Home</a>
+    <a href="#check-symptoms">Check Symptoms</a>
+    <a href="#find-doctor">Find Nearby Doctor</a>
+    <a href="#contact">Contact</a>
     <button id="theme-toggle" class="toggle-btn">🌙</button>
-
-    <!-- Language Selector -->
     <select id="language-select" class="lang-select">
       <option value="en">English</option>
       <option value="hi">Hindi</option>
@@ -470,44 +499,41 @@ nav .lang-select {
   </nav>
 </header>
 
- <div class="top-sections">
+<!-- Home Section -->
+<div id="home" class="top-sections">
   <div class="left-fade">
     <h1 class="hero-heading">Welcome to <span class="highlight">MediWise</span></h1>
-
     <p class="hero-description">
       MediWise is your intelligent healthcare companion powered by AI.<br>
       Instantly check symptoms, find nearby doctors, and receive wellness tips tailored to you.<br>
       Accessible, smart, and reliable – your health, our priority.
     </p>
-
-    <!-- Lottie Container -->
-<img src="{{ url_for('static', filename='doc.jpg') }}" alt="Doctor Image" style="width: 300px;" />
+    <!-- Lottie Container or Image -->
+    <img src="{{ url_for('static', filename='doc.jpg') }}" alt="Doctor Image" style="width: 300px;" />
   </div>
 </div>
 
-    </div>
-
-    <div class="right-fade">
-      <h2>Recommendations</h2>
-      <div class="result-boxes">
-        <div class="box disease" data-step="1">Disease Prediction</div>
-        <div class="box description" data-step="2">Description</div>
-        <div class="box precaution" data-step="3">Precautions</div>
-        <div class="box medications" data-step="4">Medications</div>
-        <div class="box workouts" data-step="5">Workouts</div>
-        <div class="box diets" data-step="6">Diet Plan</div>
-      </div>
-    </div>
+<!-- Recommendations Section (still part of Home visually, or you can move it elsewhere) -->
+<div class="right-fade" style="margin-bottom: 40px;">
+  <h2>Recommendations</h2>
+  <div class="result-boxes">
+    <div class="box disease" data-step="1">Disease Prediction</div>
+    <div class="box description" data-step="2">Description</div>
+    <div class="box precaution" data-step="3">Precautions</div>
+    <div class="box medications" data-step="4">Medications</div>
+    <div class="box workouts" data-step="5">Workouts</div>
+    <div class="box diets" data-step="6">Diet Plan</div>
   </div>
-<!-- Symptom Checker Section -->
-<section class="full-width-section symptom-section">
-  <h1>Enter Your Symptom</h1>
+</div>
+
+<!-- Check Symptoms Section -->
+<section id="check-symptoms" class="full-width-section symptom-section">
+  <h1>Check Your Symptoms</h1>
   <form id="symptomInput" method="POST" action="/predict">
     <input type="text" id="symptomInput" name="symptoms" placeholder="Enter your symptom..." required />
     <div class="example-hint">
       <em>Example: vomiting, shivering, skin_rash</em>
     </div>
-
     <select id="durationSelect" name="duration" required>
       <option value="">Select duration</option>
       <option value="1 Day">1 Day</option>
@@ -516,29 +542,28 @@ nav .lang-select {
       <option value="2 Weeks">2 Weeks</option>
       <option value="1 Month">1 Month</option>
     </select>
-
     <button type="submit" class="btn doctor-btn">Get Recommendation</button>
   </form>
   <div id="recommendationResult"></div>
 </section>
 
-<!-- Nearby Doctors Section -->
-<section class="full-width-section doctor-section">
+<!-- Find Nearby Doctor Section -->
+<section id="find-doctor" class="full-width-section doctor-section">
   <h3>Find Nearby Doctors</h3>
-  <input type="text" id="locationInput" placeholder="Enter your location" autocomplete="off" />
-  <button onclick="updateDoctors()">Find Doctors</button>
+  <input type="text" id="locationInput" placeholder="Enter location">
+  <button onclick="findDoctors()">Find Doctors</button>
   <ul id="doctorList"></ul>
-  <div id="map"></div>
+ <div id="map-container" style="display:none; height: 500px; margin-top: 20px;">
+  <div id="map" style="height: 100%; width: 100%;"></div>
+
+
 </section>
 
-
- <!-- Connect With Us Section -->
-<!-- Connect With Us -->
-<section class="connect-section">
+<!-- Contact Section -->
+<section class="connect-section" id="contact">
   <div class="connect-container">
-    <h2>Connect With Us</h2>
+    <h2>Contact</h2>
     <p>We'd love to hear from you. Reach out for queries, partnerships, or support.</p>
-
     <div class="connect-details">
       <div class="connect-item">
         <h4>Email</h4>
@@ -552,13 +577,14 @@ nav .lang-select {
         <h4>Follow Us</h4>
         <div class="social-icons">
           <a href="https://twitter.com/mediwise" target="_blank">🐦</a>
-          <a href="https://instagram.com/mediwise" target="_blank">📸</a>
+          <a href="https://instagram.com/" target="_blank">📸</a>
           <a href="https://linkedin.com/company/mediwise" target="_blank">🔗</a>
         </div>
       </div>
     </div>
   </div>
 </section>
+ 
 
 
 <!-- Footer -->
@@ -577,18 +603,17 @@ nav .lang-select {
     });
     // Theme Toggle
   const toggleBtn = document.getElementById('theme-toggle');
-  const currentTheme = localStorage.getItem('theme') || 'light';
+const currentTheme = localStorage.getItem('theme') || 'light';
+document.body.classList.toggle('dark-mode', currentTheme === 'dark');
+document.body.classList.toggle('light-mode', currentTheme === 'light');
+toggleBtn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
 
-  document.body.classList.add(currentTheme + '-mode');
-  toggleBtn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
-
-  toggleBtn.addEventListener('click', () => {
-    const isDark = document.body.classList.contains('dark-mode');
-    document.body.classList.toggle('dark-mode');
-    document.body.classList.toggle('light-mode');
-    toggleBtn.textContent = isDark ? '🌙' : '☀️';
-    localStorage.setItem('theme', isDark ? 'light' : 'dark');
-  });
+toggleBtn.addEventListener('click', () => {
+  const isDark = document.body.classList.toggle('dark-mode');
+  document.body.classList.toggle('light-mode', !isDark);
+  toggleBtn.textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
 
   // Language Selector (optional logic)
   const languageSelect = document.getElementById('language-select');
@@ -597,38 +622,74 @@ nav .lang-select {
     alert(`Language changed to: ${selected}`);
     // You can replace this with dynamic translation logic
   });
- <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
-  let map = L.map('map').setView([20.5937, 78.9629], 5); // Default: India
+     function findDoctors() {
+  const location = document.getElementById('locationInput').value.trim();
+  if (!location) return alert("Please enter a location");
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18
-  }).addTo(map);
+  fetch('/find_doctors', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ location })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
 
-  function findDoctors() {
-    const location = document.getElementById('locationInput').value;
-    if (!location) return alert("Please enter a location");
+    // Show map container
+    const mapContainer = document.getElementById('map-container');
+    mapContainer.style.display = 'block';
 
-    fetch('/find_doctors', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({location})
-    })
-    .then(res => res.json())
-    .then(data => {
-      map.setView([data.center.lat, data.center.lon], 13);
-      data.doctors.forEach(doc => {
-        L.marker([doc.lat, doc.lon])
-          .addTo(map)
-          .bindPopup(`<b>${doc.name}</b><br>${doc.address || ''}`);
-      });
-    })
-    .catch(err => {
-      alert("Error finding doctors");
-      console.error(err);
+    // Initialize map once
+    if (!window.mapInitialized) {
+      window.map = L.map('map').setView([data.center.lat, data.center.lon], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(window.map);
+      window.mapInitialized = true;
+    } else {
+      // Just move map to new location on subsequent searches
+      window.map.setView([data.center.lat, data.center.lon], 13);
+    }
+
+    // Remove existing markers if any
+    if (window.doctorMarkers) {
+      window.doctorMarkers.forEach(marker => window.map.removeLayer(marker));
+    }
+    window.doctorMarkers = [];
+
+    // Add new doctor markers
+    data.doctors.forEach(doc => {
+      // Confirm lat/lon are numbers
+      const lat = parseFloat(doc.lat);
+      const lon = parseFloat(doc.lon);
+      if (isNaN(lat) || isNaN(lon)) {
+        console.warn('Invalid doctor coordinates:', doc);
+        return;
+      }
+      const marker = L.marker([lat, lon])
+        .addTo(window.map)
+        .bindPopup(`<b>${doc.name}</b><br>${doc.address}`);
+      window.doctorMarkers.push(marker);
     });
-  }
- 
+
+    // Optional: Open popup for first doctor for visual confirmation
+    if (window.doctorMarkers.length > 0) {
+      window.doctorMarkers[0].openPopup();
+    }
+  })
+  .catch(err => {
+    alert("Error finding doctors");
+    console.error(err);
+  });
+}
+
+    </script>
   </script>
+
 </body>
 </html>  
