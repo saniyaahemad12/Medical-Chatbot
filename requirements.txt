@@ -82,7 +82,7 @@ nest-asyncio==1.6.0
 networkx==3.5
 neurokit2==0.2.10
 numba==0.61.2
-numpy==1.24.3
+numpy>=1.24.3,<1.27
 openai-whisper @ git+https://github.com/openai/whisper.git@dd985ac4b90cafeef8712f2998d62c59c3e62d22
 opencv-contrib-python==4.11.0.86
 opencv-python==4.11.0.86
