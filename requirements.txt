@@ -90,7 +90,7 @@ opencv-python==4.11.0.86
 opt_einsum==3.4.0
 optree==0.13.1
 packaging==24.1
-pandas==1.5.3
+pandas>=2.2.3,<3.0.0
 parso==0.8.4
 pdfminer==20191125
 pdfminer.six==20240706
